@@ -1,0 +1,83 @@
+package org.fasttrackit.spring.email;
+
+import java.util.*; 
+import javax.mail.*; 
+import javax.mail.PasswordAuthentication;
+import javax.mail.internet.*;
+import java.util.regex.Matcher; 
+import java.util.regex.Pattern; 
+
+
+
+
+
+
+public class SendEmailGmail {
+	
+	public static void sendAdminEmail() {
+
+		final String username = "europartsvending@gmail.com";
+		final String password = "luca77dgl";
+
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+
+		Session session = Session.getInstance(props,
+		  new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			}
+		  });
+
+		try {
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress("europartsvending@gmail.com"));
+			message.setRecipients(Message.RecipientType.TO,
+				InternetAddress.parse("patcasf12@gmail.com"));
+			message.setSubject("Testing Subject");
+			message.setText(" Email trimis de www.europartsvending.ro,Aveti un nou client care asteapta acceptul dumneavoastra"
+				+ "\n\n No spam to my email, please!");
+
+			Transport.send(message);
+
+			System.out.println("Done");
+
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static boolean isValid(String email) 
+    { 
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
+                            "[a-zA-Z0-9_+&*-]+)*@" + 
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
+                            "A-Z]{2,7}$"; 
+                              
+        Pattern pat = Pattern.compile(emailRegex); 
+        if (email == null) 
+            return false; 
+        return pat.matcher(email).matches(); 
+    } 
+	
+	public boolean checkEmail(String email) {
+		boolean isOk = false;
+		// String email = "contribute@geeksforgeeks.org"; 
+	        if (isValid(email)) {
+	        	isOk = true;
+	            System.out.print("Yes"); 
+	        }
+	        else {
+	        	isOk = false;
+	            System.out.print("No"); 
+	            }
+	        return isOk;
+	        }
+
+}
+
+
